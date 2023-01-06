@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>面试系统（细节版本）</title>
+    <link href="./detail.css" rel="stylesheet" type="text/css">
+    <!-- 新 Bootstrap5 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css">
+
+    <!--  popper.min.js 用于弹窗、提示、下拉菜单 -->
+    <script src="https://cdn.staticfile.org/popper.js/2.9.3/umd/popper.min.js"></script>
+
+    <!-- 最新的 Bootstrap5 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="left">
+
+        <div class="d-grid gap-3 buttonGroup">
+            <button type="button" class="btn btn-primary btn-block">开始面试</button>
+            <button type="button" class="btn btn-primary btn-block">下一个</button>
+            <button type="button" class="btn btn-primary btn-block">缺席</button>
+            <button type="button" class="btn btn-primary btn-block">清空面试状态</button>
+        </div>
+
+
+    </div>
+    <div class="detail" id="detail1" style="display: block;">
+        <div class="detail-left">
+            <div class="detail-left-img">
+                <img src="./img/123.png" alt="个人照片" width="100%" id="photo1">
+            </div>
+            <div class="detail-left-self">
+                <div class="row">
+                    <div class="col-sm-12 p-3 bg-primary text-white"><span>姓名：</span><span id="name"
+                            class="contain">姓名Test</span></div>
+                    <div class="col-sm-12 p-3 bg-dark text-white"><span>性别：</span><span id="sex"
+                            class="contain">Test</span></div>
+                    <div class="col-sm-12 p-3 bg-primary text-white"><span>籍贯：</span><span id="jiguan"
+                            class="contain">Test1</span></div>
+                    <div class="col-sm-12 p-3 bg-dark text-white"><span>生日：</span><span id="birthday"
+                            class="contain">Test</span></div>
+                    <div class="col-sm-12 p-3 bg-primary text-white"><span>学院：</span><span id="college"
+                            class="contain">Test</span></div>
+                    <div class="col-sm-12 p-3 bg-dark text-white"><span>专业和班级：</span><span id="majorAndClass"
+                            class="contain">Test</span></div>
+                    <div class="col-sm-12 p-3 bg-primary text-white"><span>年级：</span><span id="grade"
+                            class="contain">Test</span></div>
+                    <div class="col-sm-12 p-3 bg-dark text-white"><span>学历：</span><span id="xueli"
+                            class="contain">Test</span></div>
+                    <div class="col-sm-12 p-3 bg-primary text-white"><span>签到码：</span><span id="signcode"
+                            class="contain">Test</span></div>
+                    <div class="col-sm-12 p-3 bg-dark text-white"><span>数据库id：</span><span id="dbid">Test</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-right">
+            <div class="detail-right-self">
+                <div class="row">
+                    <div class="col-sm-6 p-3 bg-primary text-white"><span>电话：</span><span id="telephone"
+                            class="contain">Test</span></div>
+                    <div class="col-sm-6 p-3 bg-primary text-white"><span>宿舍：</span><span id="dormitory"
+                            class="contain">Test</span></div>
+                    <div class="col-sm-6 p-3 bg-primary text-white"><span>第一意向部门：</span><span id="firstDepartment"
+                            class="contain">Test</span></div>
+                    <div class="col-sm-6 p-3 bg-primary text-white"><span>第二意向部门：</span><span id="secondDepartment"
+                            class="contain">Test</span></div>
+                    <div class="col-sm-12 p-3 bg-dark text-white"><span><strong>为什么能胜任这份工作</strong><br /></span><span
+                            id="why" class="contain">Test</span></div>
+                    <div class="col-sm-12 p-3 bg-primary text-white"><span><strong>个人简介</strong><br /></span><span
+                            id="selfIntroduction" class="contain">Test</span></div>
+                    <div class="col-sm-12 p-3 bg-dark text-white"><span><strong>社会经历</strong><br /></span><span
+                            id="socialExpression" class="contain">Test</span></div>
+                    <div class="col-sm-12 p-3 bg-primary text-white"><span><strong>获奖情况</strong><br /></span><span
+                            id="getPrize" class="contain">Test</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="detail" id="detail2" style="display: none;">
+        <h1>面试未开始！</h1>
+    </div>
+    <div class="right">2</div>
+
+</body>
+<script>
+    function find() {
+        var detail1 = document.getElementById('detail1');
+        var detail2 = document.getElementById('detail2');
+        var photo = document.getElementById('photo1');
+        detail2.style.display = 'none';
+        detail1.style.display = 'block';
+        // var id = document.getElementById('idid').innerHTML;
+        var span = document.getElementsByClassName("contain");
+        var id = document.getElementById("dbid");
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var obj1 = JSON.parse(xmlhttp.responseText);
+                console.log(obj1);
+                if (obj1['code'] == -1) {
+                    detail1.style.display = 'none';
+                    detail2.style.display = 'block';
+                    alert(obj1['errmsg']);
+                    return;
+                }
+                span[0].innerHTML = obj1['name']
+                span[1].innerHTML = obj1['sex']
+                span[2].innerHTML = obj1['jiguan']
+                span[3].innerHTML = obj1['birthday']
+                span[4].innerHTML = obj1['college']
+                span[5].innerHTML = obj1['majorAndClass']
+                span[6].innerHTML = obj1['grade']
+                span[7].innerHTML = obj1['xueli']
+                span[8].innerHTML = obj1['signcode']
+                span[9].innerHTML = obj1['telephone']
+                span[10].innerHTML = obj1['dormitory']
+                span[11].innerHTML = obj1['firstDepartment']
+                span[12].innerHTML = obj1['secondDepartment']
+                span[13].innerHTML = obj1['why']
+                span[14].innerHTML = obj1['selfIntroduction']
+                span[15].innerHTML = obj1['socialExpression']
+                span[16].innerHTML = obj1['getPrize']
+                id.innerHTML = obj1['id'];
+                photo.src="./img/user/"+obj1['photo'];
+            }
+        }
+        xmlhttp.open("GET", "https://cloud.wenjiaquan.com/admin.php?model=find", true);
+        xmlhttp.send();
+    }
+    find()
+</script>
+
+</html>

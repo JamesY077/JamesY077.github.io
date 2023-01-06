@@ -1,0 +1,30 @@
+body{
+    margin: 0;
+    padding: 0;
+
+}
+table{
+    text-align: center;
+}
+.title{
+    width: 100%;
+    height: 100px;
+    overflow: hidden;
+}
+.titel-logo{
+    width: 90%;
+    margin: auto!important;
+}
+.titel-logo-span{
+    margin-left: 20px;
+    text-align: center;
+    font-size: 40px;
+}
+.main{
+    width: 390px;
+    margin: 0 auto;
+}
+.now-and-next{
+    margin-top: 15px!important;
+    text-align: center;
+}

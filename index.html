@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>开发部面试</title>
+    <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+    <link href="./index.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--  popper.min.js 用于弹窗、提示、下拉菜单 -->
+    <script src="https://cdn.staticfile.org/popper.js/2.9.3/umd/popper.min.js"></script>
+    <!-- 最新的 Bootstrap5 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.min.js"></script>
+    <script>
+    var _hmt = _hmt || [];
+        (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?a3395bb92343c0a26c3c3e3446592b42";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+</head>
+
+<body>
+<div class="main">
+    <div class="title">
+        <img class="titel-logo" src="./img/logo1.png">
+    </div>
+    <div class="row">
+
+        <div class="col-sm-12 now-and-next" id="test1"></div>
+        <div class="col-sm-12 now-and-next" id="test2"></div>
+        <script>
+            function getIsVoic() {
+                xmlhttp1 = new XMLHttpRequest();
+                xmlhttp1.onreadystatechange = function () {
+                    if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
+                        var objmp3 = JSON.parse(xmlhttp1.responseText);
+                        console.log(objmp3);
+                        if (objmp3['code'] == 1) {
+                            var mp3Id = objmp3['nowid']
+                            var mp3Url = "https://api.wenjiaquan.com/tts/" + mp3Id + ".mp3";
+                            var player = new Audio(mp3Url);
+                            player.play();
+                        }
+                    }
+                }
+                xmlhttp1.open("GET", "https://cloud.wenjiaquan.com/info.php?model=isVoic", true);
+                xmlhttp1.send();
+            }
+
+            function changetext() {
+                var test1 = document.getElementById("test1");
+                var temp_test1 = test1.innerHTML;
+                var test2 = document.getElementById("test2");
+                xmlhttp11 = new XMLHttpRequest();
+                xmlhttp11.onreadystatechange = function () {
+                    if (xmlhttp11.readyState == 4 && xmlhttp11.status == 200) {
+                        var obj3 = JSON.parse(xmlhttp11.responseText);
+                        if (obj3['code'] == 1) {
+                            test1.innerHTML = "正在面试：" + obj3['Nowmianshi'];
+                            test2.innerHTML = "签到码后六位：" + obj3['Nowcode'].slice(4, 9);
+                        } else if (obj3['code'] == 0) {
+                            test1.innerHTML = "<div style=\"margin:20px 0 20px 50px\">\n" +
+                                "  <div class=\"loader font1\">\n" +
+                                "  <span>面</span>\n" +
+                                "  <span class=\"span2\">试</span>\n" +
+                                "  <span class=\"span3\">暂</span>\n" +
+                                "  <span class=\"span4\">未</span>\n" +
+                                "  <span class=\"span5\">开</span>\n" +
+                                "  <span class=\"span6\">始</span>\n" +
+                                "  <span class=\"span7\">！</span>\n" +
+                                "</div>";
+                        } else if (obj3['code'] == 3) {
+                            test1.innerHTML = "<div style=\"margin:20px 0 20px 50px\">\n" +
+                                "  <div class=\"loader font1\">\n" +
+                                "  <span>面</span>\n" +
+                                "  <span class=\"span2\">试</span>\n" +
+                                "  <span class=\"span3\">已</span>\n" +
+                                "  <span class=\"span4\">经</span>\n" +
+                                "  <span class=\"span5\">结</span>\n" +
+                                "  <span class=\"span6\">束</span>\n" +
+                                "  <span class=\"span7\">！</span>\n" +
+                                "</div>";
+                            test2.innerHTML = "";
+                        }
+                        if (temp_test1 != test1.innerHTML) {
+                            getIsVoic()
+                        }
+                    }
+                }
+                xmlhttp11.open("GET", "https://cloud.wenjiaquan.com/first.php", true);
+                xmlhttp11.send();
+            }
+
+            changetext()
+            setInterval(function () {
+                changetext()
+            }, 2000);
+
+
+        </script>
+    </div>
+    <div class="container mt-3">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+                <th>签到码后六位</th>
+            </tr>
+            </thead>
+            <tbody id="tbody1">
+            <script>
+                var tbody1 = document.getElementById("tbody1");
+                var temp = '';
+
+                function getTable() {
+                    xmlhttp1 = new XMLHttpRequest();
+                    xmlhttp1.onreadystatechange = function () {
+                        if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
+                            var obj = JSON.parse(xmlhttp1.responseText);
+                            console.log(obj);
+                            if (obj['total'] == 0) {
+                                tbody1.innerHTML = "<tr style='font-size: 30px;font-weight: 900'><td colspan='3'>无待面试的同学</td></tr>"
+
+                            } else {
+                                for (var i = 1; i <= obj['total']; i++) {
+                                    temp += "<tr><td>" + obj[i]['id'] + "</td><td>" + obj[i]['name'] + "</td><td>" + obj[i]['signcode'].slice(4, 9) + "</td></tr>"
+                                }
+                                console.log(temp);
+
+                                tbody1.innerHTML = temp
+                                temp = ''
+                            }
+                            // console.log(obj[1]['id']);
+
+                        }
+                    }
+                    xmlhttp1.open("GET", "https://cloud.wenjiaquan.com/n5.php", true);
+                    xmlhttp1.send();
+                }
+
+                getTable()
+                setInterval(function () { //每5秒刷新一次图表
+                    //需要执行的代码写在这里
+                    getTable()
+                }, 2000);
+
+
+            </script>
+            </tbody>
+        </table>
+    </div>
+    <div style="padding: 10px 10px 10px 10px">
+        <h5>为了保证语音能够正常的播放，请您在进入本页面后，单击几次屏幕空白区域，谢谢配合！</h5>
+        <h5>页面会自动刷新，请勿频繁的刷新页面！谢谢配合！</h5>
+    </div>
+    <div style="width:90%;margin:auto;">
+        <img src="./img/botton.jpg" width="100%">
+    </div>
+</div>
+<div style="text-align:center;clear:both">
+    <script src="/gg_bd_ad_720x90.js" type="text/javascript"></script>
+    <script src="/follow.js" type="text/javascript"></script>
+</div>
+
+</body>
+
+</html>
